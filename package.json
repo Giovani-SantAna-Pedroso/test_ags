@@ -1,0 +1,14 @@
+{
+  "dependencies": {
+    "ags": "*",
+    "gnim": "*"
+  },
+  "scripts": {
+    "watch": "nodemon --watch . --ext js,ts,jsx,tsx,scss,css --exec \"ags run .\"",
+    "debug": "nodemon --watch . --ext js,ts,jsx,tsx,scss,css --exec \"GTK_DEBUG=interactive ags run .\""
+  },
+  "prettier": {
+    "semi": false,
+    "tabWidth": 2
+  }
+}

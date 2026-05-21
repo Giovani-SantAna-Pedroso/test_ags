@@ -1,0 +1,28 @@
+// https://gitlab.gnome.org/GNOME/gtk/-/blob/gtk-3-24/gtk/theme/Adwaita/_colors-public.scss
+
+
+$fg-color: #{"@theme_fg_color"};
+$bg-color: #2F2929;
+$border-radius: 0.2rem;
+
+.bar {
+  background-color: transparent;
+  padding: 0.1rem 0.8rem 0.5rem 0.8rem;
+
+  .workspace {
+    padding: 0.4rem;
+    background-color: $bg-color;
+    border-radius: $border-radius;
+  }
+
+
+  .clock {
+    padding-left: 0.4rem;
+
+    button {
+      all: unset;
+      font-weight: bolder;
+    }
+  }
+
+}

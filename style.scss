@@ -24,6 +24,12 @@ $border-radius: 0.2rem;
     }
   }
 
+  .btn-ws {
+    all: unset;
+    font-weight: light;
+    margin-right: 0.4rem;
+  }
+
   .system_tray {
     * {
       margin: 0.0rem 0.01rem;

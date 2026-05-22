@@ -1,6 +1,6 @@
 import { Gdk } from "ags/gtk4"
 import Hyprland from "gi://AstalHyprland"
-import { createBinding } from "ags"
+import { createBinding, For } from "ags"
 import SectionBar from "../SectionBar"
 
 export default function WorkspaceHypr({
@@ -9,33 +9,27 @@ export default function WorkspaceHypr({
   gdkmonitor: Gdk.Monitor
 }) {
   const hyprland = Hyprland.get_default()
-  console.log(hyprland.focused_monitor.name)
+  // console.log(hyprland.focused_monitor.name)
   const focusedWorkspace = createBinding(hyprland, "focusedWorkspace")
-  console.log(Hyprland.Workspace.dummy(0 + 2, null).name)
-
-  for (const x of hyprland.monitors) {
-    // console.log("monitor", x.name)
-  }
+  const workspaces = createBinding(hyprland, "workspaces")
+  // console.log(Hyprland.Workspace.dummy(0 + 2, null).name)
 
   for (const x of hyprland.workspaces) {
-    for (const y of x.get_clients()) {
-      // console.log(
-      // "\ntitle ",
-      // y.title,
-      // "\ntitle init",
-      // y.initial_title,
-      // "\nclasse init",
-      // y.initialClass,
-      //   "\nclasse",
-      //   y.class,
-      // )
-      // console.log()
-    }
-    // console.log("workspaces", x.name, x.get_monitor().name)
+    console.log("nome", x.name, "monitor", x.monitor.name)
   }
+
   return (
     <SectionBar>
-      <label label={"hypr work 󰈹   "} />
+      <For each={workspaces}>
+        {(workspace) => {
+          return (
+            <box>
+              {workspace.monitor.name.toString() ==
+                gdkmonitor.get_connector() && <button>{workspace.name}</button>}
+            </box>
+          )
+        }}
+      </For>
     </SectionBar>
   )
 }

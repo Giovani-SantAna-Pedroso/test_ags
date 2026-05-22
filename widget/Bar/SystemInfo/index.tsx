@@ -23,7 +23,8 @@ export default function SystemInfo({ format = "%H:%M" }) {
   const wp = AstalWp.get_default()
   const speaker = wp?.audio.defaultSpeaker!
   const volumeIcon = createBinding(speaker, "volumeIcon")
-  const volume = createBinding(speaker, "volumeIcon")
+
+  const volume = createBinding(speaker, "volume")
 
   const percent = createBinding(
     battery,
@@ -53,14 +54,18 @@ export default function SystemInfo({ format = "%H:%M" }) {
   return (
     <SectionBar>
       <box>
-        <button
-          css="cursor: pointer"
-          onClicked={(self) => exec(["pavucontrol"])}
-        >
-          <box>
-            <With value={volume}>{(vol) => <label label={vol} />}</With>
-            <With value={volumeIcon}>
-              {(icon) => <image iconName={icon} />}
+        <button onClicked={(self) => exec(["pavucontrol"])}>
+          <box css={"font-weight: normal;"}>
+            <With value={volume}>
+              {(vol) => (
+                <box>
+                  <label
+                    css={"margin-right: 0.3rem"}
+                    label={Math.round(vol * 100).toString()}
+                  />
+                  <image iconName={volumeIcon} />
+                </box>
+              )}
             </With>
           </box>
         </button>
@@ -71,6 +76,7 @@ export default function SystemInfo({ format = "%H:%M" }) {
         <label label={ramUsage.as((v) => v.padStart(4, " "))} />%
         <label label={`󰍜 `} />
       </box>
+
       <box class="info-container">
         <label label={CPUUsage.as((v) => v.padStart(4, " "))} />
         <label label={`% 󰍛 `} />

@@ -8,10 +8,6 @@ app.start({
   main(...args: Array<string>) {
     const monitors = createBinding(app, "monitors")
 
-    console.log("\n")
-    console.log(monitors.name)
-    console.log("\n")
-
     return (
       <For each={monitors}>
         {(monitor) => {

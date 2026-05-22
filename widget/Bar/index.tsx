@@ -11,6 +11,7 @@ export default function Bar({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
   let win: Astal.Window
   const { BOTTOM, LEFT, RIGHT } = Astal.WindowAnchor
 
+  // console.log("conector:", gdkmonitor.get_connector())
   onCleanup(() => {
     win.destroy()
     // unsubscribe()

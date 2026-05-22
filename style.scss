@@ -2,15 +2,53 @@
 
 
 $fg-color: #{"@theme_fg_color"};
-$bg-color: #2F2929;
+$bg-color: #{"@theme_bg_color"};
 $border-radius: 0.2rem;
 
 .bar {
   background-color: transparent;
   padding: 0.1rem 0.8rem 0.5rem 0.8rem;
 
+  .start {
+
+    >* {
+      margin-right: 0.4rem;
+    }
+  }
+
+  .center {
+
+    >* {
+      margin-right: 0.2rem;
+      margin-left: 0.2rem;
+    }
+  }
+
+  .system_tray {
+    * {
+      margin: 0.0rem 0.01rem;
+    }
+
+  }
+
+  .end {
+
+    display: flex;
+    justify-content: center;
+
+    button {
+      all: unset;
+      font-weight: bolder;
+    }
+
+    >* {
+      margin-left: 0.4rem;
+    }
+  }
+
   .workspace {
     padding: 0.4rem;
+    // background-color: $bg-color;
     background-color: $bg-color;
     border-radius: $border-radius;
   }
@@ -18,6 +56,7 @@ $border-radius: 0.2rem;
 
   .clock {
     padding-left: 0.4rem;
+    padding-right: 0.4rem;
 
     button {
       all: unset;

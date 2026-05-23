@@ -11,7 +11,6 @@ app.start({
     return (
       <For each={monitors}>
         {(monitor) => {
-          console.log(monitor.get_display())
           return (
             <This this={app}>
               <Bar gdkmonitor={monitor} />

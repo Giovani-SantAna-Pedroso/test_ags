@@ -2,6 +2,7 @@ import { Gdk } from "ags/gtk4"
 import Hyprland from "gi://AstalHyprland"
 import { createBinding, For } from "ags"
 import SectionBar from "../SectionBar"
+import { exec } from "ags/process"
 
 export default function WorkspaceHypr({
   gdkmonitor,
@@ -15,17 +16,31 @@ export default function WorkspaceHypr({
   // console.log(Hyprland.Workspace.dummy(0 + 2, null).name)
 
   for (const x of hyprland.workspaces) {
-    console.log("nome", x.name, "monitor", x.monitor.name)
+    // console.log("nome", x.name, "monitor", x.monitor.name)
   }
 
   return (
     <SectionBar>
       <For each={workspaces}>
         {(workspace) => {
+          // TODO: Change the onClicked logic when they (AGS) fix the error on the workspace.focus()
           return (
             <box>
               {workspace.monitor.name.toString() ==
-                gdkmonitor.get_connector() && <button>{workspace.name}</button>}
+                gdkmonitor.get_connector() && (
+                <button
+                  onClicked={() =>
+                    exec([
+                      "hyprctl",
+                      "dispatch",
+                      `hl.dsp.focus({ workspace = "${workspace.name}" })`,
+                    ])
+                  }
+                  class={"btn-ws"}
+                >
+                  {workspace.name}
+                </button>
+              )}
             </box>
           )
         }}

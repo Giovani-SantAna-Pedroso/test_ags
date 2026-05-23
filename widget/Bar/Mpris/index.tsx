@@ -12,7 +12,7 @@ export default function Mpris() {
     <box>
       <For each={players}>
         {(player) => {
-          console.log(player.title)
+          // console.log(player.title)
           return (
             <box spacing={4}>
               {/* <box overflow={Gtk.Overflow.HIDDEN} css="border-radius: 8px;"> */}

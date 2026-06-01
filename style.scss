@@ -3,11 +3,14 @@
 
 $fg-color: #{"@theme_fg_color"};
 $bg-color: #{"@theme_bg_color"};
+$color-ws-active: #fff;
 $border-radius: 0.2rem;
 
 .bar {
   background-color: transparent;
-  padding: 0.1rem 0.8rem 0.5rem 0.8rem;
+  // background-color: $bg-color;
+  // background-color: $fg-color;
+  padding: 0.2rem 0.8rem 0.4rem 0.8rem;
 
   .start {
 
@@ -26,9 +29,19 @@ $border-radius: 0.2rem;
 
   .btn-ws {
     all: unset;
-    font-weight: light;
+    font-weight: 300;
     margin-right: 0.2rem;
     margin-left: 0.2rem;
+
+    &.active {
+      color: #fff;
+      font-weight: 800;
+    }
+
+    &.inactive {
+
+      color: #888
+    }
   }
 
   .system_tray {
@@ -40,12 +53,10 @@ $border-radius: 0.2rem;
 
   .end {
 
-    display: flex;
-    justify-content: center;
 
     button {
       all: unset;
-      font-weight: bolder;
+      font-weight: 700;
     }
 
     >* {

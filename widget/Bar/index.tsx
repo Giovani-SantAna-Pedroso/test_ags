@@ -35,7 +35,7 @@ export default function Bar({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
           </SectionBar>
         </box>
         <box class="end" $type="end">
-          <Tray />
+          {/* <Tray /> */}
           <SystemInfo />
         </box>
       </centerbox>

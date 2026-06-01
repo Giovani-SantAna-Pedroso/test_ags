@@ -60,7 +60,7 @@ export default function SystemInfo({ format = "%H:%M" }) {
               {(vol) => (
                 <box>
                   <label
-                    css={"margin-right: 0.3rem"}
+                    css={"margin-right: 0.3rem;"}
                     label={Math.round(vol * 100).toString()}
                   />
                   <image iconName={volumeIcon} />

@@ -15,6 +15,7 @@ export default function WorkspaceHypr({
   const workspaces = createBinding(hyprland, "workspaces")
   // console.log(Hyprland.Workspace.dummy(0 + 2, null).name)
   console.log("fee", focusedWorkspace)
+
   for (const x in hyprland.workspaces) {
     console.log(x)
   }

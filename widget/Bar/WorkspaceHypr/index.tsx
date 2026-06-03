@@ -1,6 +1,6 @@
 import { Gdk } from "ags/gtk4"
 import Hyprland from "gi://AstalHyprland"
-import { createBinding, For } from "ags"
+import { createBinding, createComputed, For } from "ags"
 import SectionBar from "../SectionBar"
 import { exec } from "ags/process"
 
@@ -10,25 +10,28 @@ export default function WorkspaceHypr({
   gdkmonitor: Gdk.Monitor
 }) {
   const hyprland = Hyprland.get_default()
-  // console.log(hyprland.focused_monitor.name)
   const focusedWorkspace = createBinding(hyprland, "focusedWorkspace")
   const workspaces = createBinding(hyprland, "workspaces")
-  // console.log(Hyprland.Workspace.dummy(0 + 2, null).name)
-  console.log("fee", focusedWorkspace)
 
-  for (const x in hyprland.workspaces) {
-    console.log(x)
-  }
+  const btns = createComputed(() => {
+    const x = workspaces()
+    x.sort((a, b) => parseInt(a.name) - parseInt(b.name))
+    return x
+  })
 
-  for (const x of hyprland.workspaces) {
-    // console.log("nome", x.name, "monitor", x.monitor.name)
-  }
-
+  // exec(["hyprctl", "dispatch", `workspace ${workspace.name}`])
   return (
     <SectionBar>
-      <For each={workspaces}>
+      <For each={btns}>
         {(workspace) => {
-          // TODO: Change the onClicked logic when they (AGS) fix the error on the workspace.focus()
+          const btnClass = createComputed(
+            () =>
+              "btn-ws " +
+              (workspace.name == focusedWorkspace().name
+                ? "active"
+                : "inactive"),
+          )
+
           return (
             <box>
               {workspace.monitor.name.toString() ==
@@ -37,16 +40,11 @@ export default function WorkspaceHypr({
                   onClicked={() =>
                     exec([
                       "hyprctl",
-                      "dispatch",
-                      `hl.dsp.focus({ workspace = "${workspace.name}" })`,
+                      "eval",
+                      `hl.dispatch(hl.dsp.focus({ workspace = "${workspace.name}" }))`,
                     ])
                   }
-                  class={
-                    "btn-ws " +
-                    (workspace.name == focusedWorkspace().name
-                      ? "active"
-                      : "inactive")
-                  }
+                  class={btnClass}
                 >
                   {workspace.name}
                 </button>

@@ -6,6 +6,7 @@ import SystemInfo from "./SystemInfo"
 import Tray from "./Tray"
 import SectionBar from "./SectionBar"
 import Mpris from "./Mpris"
+import MenuBtn from "./MenuBtn"
 
 export default function Bar({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
   let win: Astal.Window
@@ -27,6 +28,7 @@ export default function Bar({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
     >
       <centerbox>
         <box class="start" $type="start">
+          <MenuBtn gdkmonitor={gdkmonitor} />
           <WorkspaceHypr gdkmonitor={gdkmonitor} />
         </box>
         <box class="center" $type="center">
@@ -35,7 +37,7 @@ export default function Bar({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
           </SectionBar>
         </box>
         <box class="end" $type="end">
-          {/* <Tray /> */}
+          <Tray />
           <SystemInfo />
         </box>
       </centerbox>

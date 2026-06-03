@@ -28,7 +28,7 @@ export default function Bar({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
     >
       <centerbox>
         <box class="start" $type="start">
-          <MenuBtn gdkmonitor={gdkmonitor} />
+          {/* <MenuBtn gdkmonitor={gdkmonitor} /> */}
           <WorkspaceHypr gdkmonitor={gdkmonitor} />
         </box>
         <box class="center" $type="center">

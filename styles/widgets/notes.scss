@@ -1,0 +1,82 @@
+@use '../variables.scss' as *;
+
+.notes-board {
+
+  .note-form {
+    padding: 1rem;
+    border-radius: $border-radius-md;
+    background-color: $bg-color;
+
+    min-width: 400px;
+    filter: drop-shadow(4px 4px 6px rgba(0, 0, 0, 0.4));
+
+    .btn-delete-note {
+      background-color: red;
+      margin-top: 1rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .err-msg {
+      margin-top: 1rem;
+      color: red;
+      font-weight: 800;
+    }
+
+    .entry {
+      label {
+        font-weight: 800;
+        margin-bottom: 0.4rem;
+      }
+
+      margin-bottom: 1rem;
+    }
+
+  }
+
+  .btns-containers {
+    margin-bottom: 1rem;
+  }
+
+  font-family: "Caveat",
+  "Kalam",
+  cursive;
+
+  padding: 1.0rem;
+
+
+  .note {
+    filter: drop-shadow(4px 4px 6px rgba(0, 0, 0, 0.4));
+    color: black;
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+
+    border-radius: $border-radius-md;
+
+    .title {
+      font-size: 1.4rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+
+    }
+
+
+    .content {
+
+      font-family: "Caveat", "Kalam", cursive;
+
+    }
+
+    .deadline {
+      margin: 0.6rem 0rem;
+
+      font-weight: 100;
+    }
+
+    .urgency {
+      padding: 0.2rem;
+      border-radius: $border-radius;
+    }
+
+    padding: 1.0rem;
+  }
+}

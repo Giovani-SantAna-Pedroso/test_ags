@@ -1,8 +1,15 @@
-import { Astal } from "ags/gtk4"
-import { createBinding, createComputed, For } from "ags"
+import { Astal, Gtk } from "ags/gtk4"
+import { createBinding, createComputed, createState, For, With } from "ags"
 import Hyprland from "gi://AstalHyprland"
+import Note, { NoteProps } from "./Note"
+import { getNotes } from "./notesService"
+import NoteForm from "./NoteForm"
 
-export default function NotesWindow() {
+export default function NotesWindow({
+  gdkmonitor,
+}: {
+  gdkmonitor: Gdk.Monitor
+}) {
   const hypr = Hyprland.get_default()
 
   const focusedWorkspace = createBinding(hypr, "focusedWorkspace")
@@ -11,23 +18,87 @@ export default function NotesWindow() {
     return true
   })
 
+  const [notes, setNotes] = createState(getNotes())
+  const [idNoteToEdit, setIdNoteToEdit] = createState("")
+  const [isFormOpen, setIsFormOpen] = createState(false)
+  const [isToShowNotes, setIsToShowNotes] = createState(true)
+  const icontHideNotes = createComputed(() =>
+    !isToShowNotes() ? "view-reveal-symbolic" : "view-conceal-symbolic",
+  )
+  const icontAddNote = createComputed(() =>
+    !isFormOpen() ? "list-add" : "window-close-symbolic",
+  )
+  const hideHideNotesBtn = createComputed(() => !isFormOpen())
+
+  const handleReloadhNotes = () => {
+    setNotes(getNotes())
+  }
+
+  const handleEditNote = (id: string) => {
+    setIdNoteToEdit(id)
+    setIsFormOpen(true)
+  }
+
+  const handleToggleForm = () => {
+    if (isFormOpen()) {
+      // console.log("closing")
+      setIsFormOpen(false)
+      setIdNoteToEdit("")
+    } else {
+      setIsFormOpen(true)
+    }
+  }
+
   return (
     <window
+      $={(self) => {
+        self.set_default_size(1, 1)
+      }}
       name="notes-board"
       namespace="notes-board"
-      anchor={
-        Astal.WindowAnchor.TOP |
-        Astal.WindowAnchor.LEFT |
-        Astal.WindowAnchor.RIGHT |
-        Astal.WindowAnchor.BOTTOM
-      }
+      gdkmonitor={gdkmonitor}
+      anchor={Astal.WindowAnchor.TOP | Astal.WindowAnchor.LEFT}
       exclusivity={Astal.Exclusivity.IGNORE}
       layer={Astal.Layer.BACKGROUND}
+      keymode={Astal.Keymode.ON_DEMAND}
       visible={visible}
+      class="notes-board"
       cssClasses={["notes-window"]}
     >
-      <box>
-        <label label="eee" />
+      <box orientation={Gtk.Orientation.VERTICAL}>
+        <box spacing={8} class="btns-containers">
+          <button onClicked={() => handleToggleForm()}>
+            <image iconName={icontAddNote} pixelSize={16} />
+          </button>
+          <button
+            visible={hideHideNotesBtn}
+            onClicked={() => setIsToShowNotes((y) => !y)}
+          >
+            <image iconName={icontHideNotes} pixelSize={16} />
+          </button>
+        </box>
+        <With value={isFormOpen}>
+          {(value) =>
+            value ? (
+              <NoteForm
+                idNote={idNoteToEdit()}
+                updateNotes={() => handleReloadhNotes()}
+                closeForm={() => handleToggleForm()}
+              />
+            ) : (
+              <box visible={isToShowNotes}>
+                <For each={notes}>
+                  {(note) => (
+                    <Note
+                      {...note}
+                      handleEditNote={() => handleEditNote(note.id)}
+                    />
+                  )}
+                </For>
+              </box>
+            )
+          }
+        </With>
       </box>
     </window>
   )

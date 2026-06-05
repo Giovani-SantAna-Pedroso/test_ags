@@ -19,7 +19,6 @@ export default function WorkspaceHypr({
     return x
   })
 
-  // exec(["hyprctl", "dispatch", `workspace ${workspace.name}`])
   return (
     <SectionBar>
       <For each={btns}>

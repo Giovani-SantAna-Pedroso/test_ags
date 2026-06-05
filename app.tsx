@@ -1,5 +1,5 @@
 import app from "ags/gtk4/app"
-import scss from "./style.scss"
+import scss from "./styles/style.scss"
 import { createBinding, For, This } from "ags"
 import Bar from "./widget/Bar"
 import NotesBoard from "./widget/NotesBoard"
@@ -14,7 +14,7 @@ app.start({
         {(monitor) => {
           return (
             <This this={app}>
-              {/* <NotesBoard /> */}
+              <NotesBoard gdkmonitor={monitor} />
               <Bar gdkmonitor={monitor} />
             </This>
           )

@@ -1,59 +1,86 @@
-import Note, { NoteProps } from "./Note"
+import { NoteProps } from "./Note"
+import { readFile, writeFile } from "ags/file"
+import GLib from "gi://GLib"
+import Gio from "gi://Gio"
 
-let notesTmp: NoteProps[] = [
-  {
-    id: "1",
-    title: "Test",
-    content:
-      "This is a note for testing This is a \nnote for testing This is a note for testing\n This is a note for testing",
-    urgency: "low",
-    deadline: new Date(Date.now()),
-    bgColor: "#fef08a",
-  },
-  {
-    id: "2",
-    title: "Test",
-    content: "This is a note for testing",
-    urgency: "medium",
-    deadline: new Date(Date.now()),
-    bgColor: "#e9d5ff",
-  },
-  {
-    id: "3",
-    title: "Test",
-    content: "This is a note for testing",
-    urgency: "high",
-    deadline: new Date(Date.now()),
-    bgColor: "#a5f3fc",
-  },
-  {
-    id: "4",
-    title: "Test",
-    content: "This is a note for testing",
-    urgency: "high",
-    deadline: new Date(Date.now()),
-    bgColor: "#bbf7d0",
-  },
-]
+let notesMem: NoteProps[] = []
 
-export function getNotes(): NoteProps[] {
-  return notesTmp
+let wasFileLoad = false
+
+const NOTES_FILE_PATH = "./configs/notes.json"
+
+function ensureFileExists(): void {
+  const file = Gio.File.new_for_path(NOTES_FILE_PATH)
+  if (!file.query_exists(null)) {
+    const dir = file.get_parent()
+    if (dir) {
+      GLib.mkdir_with_parents(dir.get_path()!, 0o755)
+    }
+    file.replace_contents(
+      new TextEncoder().encode("[]"),
+      null,
+      false,
+      Gio.FileCreateFlags.NONE,
+      null,
+    )
+  }
 }
 
-export function getNoteInfo(id: string) {
+export function getNotesFromFile(): NoteProps[] {
+  try {
+    ensureFileExists()
+    const content = readFile(NOTES_FILE_PATH)
+
+    const notes = JSON.parse(content) as (Omit<NoteProps, "deadline"> & {
+      deadline: string
+    })[]
+
+    return notes.map((note) => ({
+      ...note,
+      deadline: new Date(note.deadline),
+    }))
+  } catch (error) {
+    console.error("Failed to load notes:", error)
+    return []
+  }
+}
+
+export function getNotes(): NoteProps[] {
+  if (!wasFileLoad) {
+    notesMem = getNotesFromFile()
+    wasFileLoad = true
+  }
+
+  return notesMem
+}
+
+function saveNotes() {
+  writeFile(NOTES_FILE_PATH, JSON.stringify(notesMem, null, 2))
+}
+
+export function getNoteInfo(id: string): NoteProps | undefined {
   return getNotes().find((note) => note.id === id)
 }
 
 export function addNote(newNote: NoteProps) {
-  notesTmp = [...notesTmp, { ...newNote, id: notesTmp.length.toString() }]
+  notesMem.push({
+    ...newNote,
+    id: `${Date.now()}-${Math.floor(Math.random() * 100000)}`,
+  })
+
+  saveNotes()
 }
 
 export function deleteNote(id: string) {
-  notesTmp = notesTmp.filter((note) => note.id !== id)
+  notesMem = notesMem.filter((note) => note.id !== id)
+
+  saveNotes()
 }
 
 export function updateNote(updatedNote: NoteProps) {
-  notesTmp = notesTmp.map((note) =>
+  notesMem = notesMem.map((note) =>
     note.id === updatedNote.id ? updatedNote : note,
   )
+
+  saveNotes()
 }

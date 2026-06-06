@@ -22,6 +22,7 @@
       font-weight: 800;
     }
 
+
     .entry {
       label {
         font-weight: 800;
@@ -33,13 +34,16 @@
 
   }
 
+  .text-view {
+    background-color: $bg-color2;
+    padding: 0.6rem;
+    border-radius: $border-radius-md;
+  }
+
   .btns-containers {
     margin-bottom: 1rem;
   }
 
-  font-family: "Caveat",
-  "Kalam",
-  cursive;
 
   padding: 1.0rem;
 
@@ -49,6 +53,7 @@
     color: black;
     margin-right: 1rem;
     margin-bottom: 1rem;
+    min-width: 200px;
 
     border-radius: $border-radius-md;
 
@@ -60,20 +65,23 @@
     }
 
 
-    .content {
+    .urgency-deadline {
+      margin-bottom: 0.6rem;
+      margin-top: 1rem;
 
+    }
+
+    .content {
       font-family: "Caveat", "Kalam", cursive;
 
     }
 
     .deadline {
-      margin: 0.6rem 0rem;
-
       font-weight: 100;
     }
 
     .urgency {
-      padding: 0.2rem;
+      padding: 0.2rem 0.8rem;
       border-radius: $border-radius;
     }
 

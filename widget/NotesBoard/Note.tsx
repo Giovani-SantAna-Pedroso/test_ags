@@ -22,7 +22,7 @@ export default function Note(props: NoteProps) {
 
   if (props.urgency == "low") {
     bgColorUrgency = "#bbf7d0"
-  } else if ((props.urgency = "medium")) {
+  } else if (props.urgency == "medium") {
     bgColorUrgency = "#fef08a"
   } else {
     bgColorUrgency = "#fca5a5"
@@ -53,7 +53,12 @@ export default function Note(props: NoteProps) {
           class="content"
           label={props.content}
         />
-        <centerbox $type="end" orientation={Gtk.Orientation.HORIZONTAL}>
+      </centerbox>
+      <box orientation={Gtk.Orientation.VERTICAL}>
+        <centerbox
+          class="urgency-deadline"
+          orientation={Gtk.Orientation.HORIZONTAL}
+        >
           <label
             $type="start"
             halign={Gtk.Align.START}
@@ -68,15 +73,16 @@ export default function Note(props: NoteProps) {
             label={props.deadline.toLocaleDateString(formatDate)}
           />
         </centerbox>
-      </centerbox>
-      <button
-        onClicked={() => props.handleEditNote()}
-        css={`
-          background-color: ${props.bgColor};
-        `}
-      >
-        Edit Note
-      </button>
+
+        <button
+          onClicked={() => props.handleEditNote()}
+          css={`
+            background-color: ${props.bgColor};
+          `}
+        >
+          Edit Note
+        </button>
+      </box>
     </box>
   )
 }

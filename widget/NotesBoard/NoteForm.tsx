@@ -112,16 +112,6 @@ export default function NoteForm(props: NoteFormProps) {
       </box>
 
       <box class="entry" orientation={Gtk.Orientation.VERTICAL}>
-        <label halign={Gtk.Align.START} label="Content" />
-        <entry
-          hexpand
-          placeholderText="Content"
-          text={newContent} // ← era newTitle
-          onNotifyText={({ text }: { text: string }) => setNewContent(text)} // ← era setNewTitle
-        />
-      </box>
-
-      <box class="entry" orientation={Gtk.Orientation.VERTICAL}>
         <label halign={Gtk.Align.START} label="Deadline" />
         <entry
           hexpand
@@ -176,6 +166,33 @@ export default function NoteForm(props: NoteFormProps) {
             </box>
           </popover>
         </menubutton>
+      </box>
+
+      <box class="entry" orientation={Gtk.Orientation.VERTICAL}>
+        <label halign={Gtk.Align.START} label="Content" />
+        <scrolledwindow hexpand minContentHeight={100}>
+          <With value={newContent}>
+            {(value) => (
+              <Gtk.TextView
+                class="text-view"
+                editable={true}
+                $={(self) => {
+                  self.buffer.set_text(value, -1)
+                  self.buffer.connect("changed", () => {
+                    const buf = self.buffer
+                    setNewContent(
+                      buf.get_text(
+                        buf.get_start_iter(),
+                        buf.get_end_iter(),
+                        false,
+                      ),
+                    )
+                  })
+                }}
+              />
+            )}
+          </With>
+        </scrolledwindow>
       </box>
 
       <box>

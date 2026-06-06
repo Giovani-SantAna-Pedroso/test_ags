@@ -4,6 +4,7 @@ import Hyprland from "gi://AstalHyprland"
 import Note, { NoteProps } from "./Note"
 import { getNotes } from "./notesService"
 import NoteForm from "./NoteForm"
+import { confNotesBoard } from "../../configs/config"
 
 export default function NotesWindow({
   gdkmonitor,
@@ -28,7 +29,9 @@ export default function NotesWindow({
   const icontAddNote = createComputed(() =>
     !isFormOpen() ? "list-add" : "window-close-symbolic",
   )
-  const hideHideNotesBtn = createComputed(() => !isFormOpen())
+  const hideHideNotesBtn = createComputed(() => {
+    return !isFormOpen()
+  })
 
   const handleReloadhNotes = () => {
     setNotes(getNotes())
@@ -86,15 +89,43 @@ export default function NotesWindow({
                 closeForm={() => handleToggleForm()}
               />
             ) : (
-              <box visible={isToShowNotes}>
-                <For each={notes}>
-                  {(note) => (
-                    <Note
-                      {...note}
-                      handleEditNote={() => handleEditNote(note.id)}
-                    />
-                  )}
-                </For>
+              <box
+                orientation={Gtk.Orientation.VERTICAL}
+                visible={isToShowNotes}
+              >
+                <With value={notes}>
+                  {(value) => {
+                    const maxCols = confNotesBoard.maxCols
+                    const maxRows = confNotesBoard.maxRow
+                    const rowSpacing = confNotesBoard.rowSpacing
+                    const colSpacing = confNotesBoard.colSpacing
+
+                    return (
+                      <Gtk.Grid
+                        columnSpacing={colSpacing}
+                        rowSpacing={rowSpacing}
+                        $={(self) => {
+                          value
+                            .slice(0, maxCols * maxRows)
+                            .forEach((note, i) => {
+                              const col = i % maxCols
+                              const row = Math.floor(i / maxCols)
+                              self.attach(
+                                <Note
+                                  {...note}
+                                  handleEditNote={() => handleEditNote(note.id)}
+                                />,
+                                col,
+                                row,
+                                1,
+                                1,
+                              )
+                            })
+                        }}
+                      />
+                    )
+                  }}
+                </With>
               </box>
             )
           }
